@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>AI Career Bodyguard</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f5f7fb;
+padding:40px;
+}
+
+.container{
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+width:700px;
+}
+
+textarea{
+width:100%;
+padding:10px;
+font-size:14px;
+}
+
+button{
+background:#2563eb;
+color:white;
+padding:10px 20px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+.report{
+margin-top:25px;
+padding:20px;
+border-radius:8px;
+background:#f8fafc;
+}
+
+.safe{color:green;}
+.suspicious{color:#eab308;}
+.danger{color:orange;}
+.high{color:red;}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🛡 AI Email Authenticity Checker</h2>
+
+<p>Paste the email content below</p>
+
+<textarea id="email" rows="10"></textarea>
+
+<br><br>
+
+<button onclick="analyze()">Analyze Email</button>
+
+<div id="result" class="report"></div>
+
+</div>
+
+<script>
+
+async function analyze(){
+
+let email = document.getElementById("email").value
+
+let response = await fetch("http://127.0.0.1:8000/analyze",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({email_text:email})
+})
+
+let data = await response.json()
+
+let color="safe"
+
+if(data.risk_level=="SUSPICIOUS") color="suspicious"
+if(data.risk_level=="DANGER") color="danger"
+if(data.risk_level=="HIGH RISK") color="high"
+
+document.getElementById("result").innerHTML=
+
+"<h3>Email Authenticity Report</h3>"+
+
+"<b>Person:</b> "+data.person+"<br>"+
+"<b>Company:</b> "+data.company+"<br><br>"+
+
+"<b>Domain Check:</b> "+data.domain_check+"<br>"+
+"<b>LinkedIn Check:</b> "+data.linkedin_check+"<br><br>"+
+
+"<b>Risk Score:</b> "+data.risk_score+"<br>"+
+
+"<b class='"+color+"'>Risk Level: "+data.risk_level+"</b>"+
+
+"<br><br><b>Red Flags:</b> "+data.red_flags+
+
+"<br><br><b>Explanation:</b> "+data.explanation+
+
+"<br><br><b>Recommendation:</b> "+data.recommendation
+
+}
+
+</script>
+
+</body>
+</html>
