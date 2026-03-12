@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "AI Career Bodyguard",
+  "version": "1.0",
+  "description": "Detect fake job and internship emails",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": [
+    "http://127.0.0.1:8000/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
